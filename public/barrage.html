@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>弹幕墙</title>
+    <script src="libs/socket.io.min.js"></script>
+    <style>
+        body{ margin:0; padding:0;}
+        span{
+            position: absolute;
+            right:0;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <script>
+        var container = document.getElementById('container');
+        var socket = io('http://localhost:3000');
+
+        var documentWidth = document.body.clientWidth;
+        var COLORS = [
+            '#e21400', '#91580f', '#f8a700', '#f78b00',
+            '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
+            '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+        ];
+        var TIMES = [6,7,8,9,10];
+        var FONT = [24,28,32,36,40];
+
+        socket.on('barrage message', function(data){
+            var oSpan = document.createElement('span'),
+                right = 0,
+                top = Math.round(Math.random()*100)+'%',
+                color = COLORS[Math.round(Math.random()*11)],
+                time = TIMES[Math.round(Math.random()*5)],
+                font = FONT[Math.round(Math.random()*5)];
+
+            oSpan.innerHTML = data;
+            oSpan.style.color = color;
+            oSpan.style.fontSize = font;
+            container.appendChild(oSpan);
+
+            setTimeout(function(){
+                oSpan.style.transition = time+'s linear';
+                oSpan.style.top = top;
+                oSpan.style.right = oSpan.offsetWidth+documentWidth+10+'px';
+            }, 0);
+        });
+    </script>
+</body>
+</html>

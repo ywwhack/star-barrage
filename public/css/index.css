@@ -1,0 +1,51 @@
+body{
+    padding-bottom:50px;
+}
+ul{ margin:0; padding:0; list-style: none;}
+.content{
+    word-wrap: break-word;
+    word-break: normal;
+    max-width:320px;
+}
+.red{
+    color:red;
+}
+.switch{
+    margin-bottom:10px;
+    border-bottom:1px solid #ccc;
+}
+.switch li{
+    padding:5px;
+    border:1px solid #ccc;
+    border-bottom:0;
+    cursor: pointer;
+    text-align: center;
+}
+.switch li:nth-of-type(1){ border-right:0;}
+.switch li.active{
+    background:rgb(130, 224, 255);
+}
+.red{ color:red;}
+.message-box{
+    position: fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+}
+.form-horizontal .no-margin{
+    margin-bottom:0;
+    margin-left:15px;
+}
+.no-padding>div{
+    padding:0;
+    border-radius: 0;
+}
+.no-padding input{
+    border-radius: 0;
+}
+.no-padding>div:nth-of-type(1){
+    border-right:0;
+}
+.no-padding input[type=text]{
+    border-right:0;
+}

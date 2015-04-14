@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>抢票</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link href="css/index.css" type="text/css" rel="stylesheet" />
+    <script src="libs/socket.io.min.js"></script>
+    <style>
+        span{
+            position: absolute;
+            right:0;
+        }
+        .justify{
+            margin-top:20%;
+        }
+        #time-box{
+            -webkit-transition: 10s;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+            <div class="text-center" id="time-box">
+                <h4>倒计时</h4>
+                <h4 id="countdown">00:00:00</h4>
+            </div>
+        <div id="container" style="display: none;">
+            <div class="row message-box">
+                <form class="form-horizontal" id="message">
+                    <div class="form-group no-padding no-margin">
+                        <div class="col-xs-6">
+                            <input type="text" class="form-control" name="content" placeholder=""/>
+                        </div>
+                        <div class="col-xs-3">
+                            <input type="submit" class="btn btn-default btn-block" value="发弹幕"/>
+                        </div>
+                        <div class="col-xs-3">
+                            <input type="button" id="grap-btn" class="btn btn-default btn-block" value="抢票" disabled="disabled">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row center-block justify">
+            <div class="col-xs-offset-2 col-xs-8">
+                <form id="login">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="请输入学号" name="sid"/>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-info btn-block" type="submit">进入抢票页面</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--<video width="100%" height="100%" autoplay loop>
+        <source src="https://t.alipayobjects.com/images/T1T78eXapfXXXXXXXX.mp4">
+    </video>-->
+    <script>
+        var socket = io('http://localhost:3000'),
+            oLogin = document.getElementById('login'),
+            oContainer = document.getElementById('container'),
+            oMessage = document.getElementById('message'),
+            oGrapBtn = document.getElementById('grap-btn'),
+            sid,
+            re = /\d{8}/;
+
+        oLogin.onsubmit = function(ev){
+            ev.preventDefault();
+            if(re.test(this.sid.value)){
+                sid = this.sid.value;
+                oContainer.style.display = 'block';
+                this.style.display = 'none';
+            }else{
+                alert('学号输入有误');
+            }
+        };
+
+        message.onsubmit = function(ev){
+            ev.preventDefault();
+            socket.emit('add ticket_message', this.content.value);
+            this.content.value = '';
+        };
+
+        oGrapBtn.onclick = function(){
+            socket.emit('grap ticket', sid);
+        };
+
+        socket.on('disconnect', function(data){
+            if(data == 'io server disconnect'){
+                alert('请不要刷屏');
+            }
+            location.reload();
+        });
+
+        socket.on('get ticket', function(){
+            alert('恭喜你抢到票啦～');
+        });
+
+        socket.on('had ticket', function(){
+            alert('你抢到票了，请凭一卡通前去领取');
+        });
+
+        socket.on('no ticket', function(){
+            alert('票已经抢完了');
+        });
+    </script>
+    <script>
+        var documentWidth = document.body.clientWidth;
+        var COLORS = [
+            '#e21400', '#91580f', '#f8a700', '#f78b00',
+            '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
+            '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+        ];
+        var TIMES = [6,7,8,9,10];
+        var FONT = [24,28,32,36,40];
+        socket.on('ticket message', function(data){
+            var oSpan = document.createElement('span'),
+                    top = Math.round(20+Math.random()*60)+'%',
+                    color = COLORS[Math.round(Math.random()*11)],
+                    time = TIMES[Math.round(Math.random()*5)],
+                    font = FONT[Math.round(Math.random()*5)];
+            oSpan.innerHTML = data;
+            oSpan.style.color = color;
+            oSpan.style.fontSize = font;
+            oSpan.style.top = top;
+            oContainer.appendChild(oSpan);
+
+            setTimeout(function(){
+                oSpan.style.transition = time+'s linear';
+                oSpan.style.right = oSpan.offsetWidth+documentWidth+10+'px';
+            }, 0);
+        });
+    </script>
+    <script>
+        var countdown = document.getElementById('countdown'),
+            oTimeBox = document.getElementById('time-box'),
+            ticketDate = new Date("2015-04-14 20:00:30");
+        timer = setInterval(calcTime, 1000);
+        calcTime();
+
+        function calcTime(){
+            var seconds = Math.round((ticketDate.getTime()-Date.now())/1000),
+                    hour = Math.floor(seconds/3600),
+                    min = Math.floor((seconds-hour*3600)/60),
+                    sec = seconds-hour*3600-min*60;
+            if(seconds<0){
+                oTimeBox.style.height = '0px';
+                oGrapBtn.disabled = false;
+                clearInterval(timer);
+            }else{
+                countdown.innerHTML = toDouble(hour)+':'+toDouble(min)+':'+toDouble(sec);
+            }
+        }
+        function toDouble(number){
+            var string = ''+number;
+            if(string.length<2){
+                return '0'+string;
+            }else{
+                return string;
+            }
+        }
+    </script>
+    <script>
+
+    </script>
+</body>
+</html>
