@@ -23,11 +23,11 @@
 </head>
 <body>
     <div class="container-fluid">
+        <div id="container" style="display: none;">
             <div class="text-center" id="time-box">
                 <h4>倒计时</h4>
                 <h4 id="countdown">00:00:00</h4>
             </div>
-        <div id="container" style="display: none;">
             <div class="row message-box">
                 <form class="form-horizontal" id="message">
                     <div class="form-group no-padding no-margin">
@@ -76,7 +76,7 @@
                 oContainer.style.display = 'block';
                 this.style.display = 'none';
             }else{
-                alert('学号输入有误');
+                alert('(●—●)请输入正确的学号～～,这是领票唯一凭证哦');
             }
         };
 
@@ -92,21 +92,21 @@
 
         socket.on('disconnect', function(data){
             if(data == 'io server disconnect'){
-                alert('请不要刷屏');
+                alert('请不要刷屏哦～');
             }
             location.reload();
         });
 
         socket.on('get ticket', function(){
-            alert('恭喜你抢到票啦～');
+            alert('恭喜你抢到票了，请凭一卡通前去领取～');
         });
 
         socket.on('had ticket', function(){
-            alert('你抢到票了，请凭一卡通前去领取');
+            alert('不要太贪心哦，你已经抢到票啦，请凭一卡通前去领取～');
         });
 
         socket.on('no ticket', function(){
-            alert('票已经抢完了');
+            alert('票已经抢完啦～，人品先攒着，还有其他方式哦～');
         });
     </script>
     <script>
@@ -139,7 +139,7 @@
     <script>
         var countdown = document.getElementById('countdown'),
             oTimeBox = document.getElementById('time-box'),
-            ticketDate = new Date("2015-04-14 20:00:30");
+            ticketDate = new Date("2015-04-14 21:18:30");
         timer = setInterval(calcTime, 1000);
         calcTime();
 
@@ -164,9 +164,6 @@
                 return string;
             }
         }
-    </script>
-    <script>
-
     </script>
 </body>
 </html>
