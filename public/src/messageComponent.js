@@ -1,3 +1,5 @@
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
 var MessageBox = React.createClass({displayName: "MessageBox",
     getInitialState:function(){
         return {data:[], orderBy:'time'};
@@ -19,8 +21,6 @@ var MessageBox = React.createClass({displayName: "MessageBox",
     },
     messageSubmit:function(message){
         socket.emit('add message', message);
-        //this.state.data.unshift(message);
-        //this.setState({data:this.state.data});
     },
     starClick:function(id){
         var messages = this.state.data;
@@ -64,9 +64,9 @@ var MessageList =React.createClass({displayName: "MessageList",
     },
     render:function(){
         var self = this;
-        var lists = this.props.data.map(function(message, index){
+        var lists = this.props.data.map(function(message){
             return (
-                React.createElement("li", {key: index, className: "media"}, 
+                React.createElement("li", {key: message._id, className: "media"}, 
                     React.createElement("div", {className: "media-left media-middle"}, 
                         React.createElement("img", {className: "media-object", src: message.avator})
                     ), 
@@ -87,7 +87,7 @@ var MessageList =React.createClass({displayName: "MessageList",
             );
         });
         return (
-            React.createElement("ul", null, 
+            React.createElement(ReactCSSTransitionGroup, {component: "ul", transitionName: "example"}, 
                 lists
             )
         );

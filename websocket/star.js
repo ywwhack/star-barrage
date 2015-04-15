@@ -1,7 +1,7 @@
 var Message = require('../models/messages'),
     fs = require('fs');
 
-module.exports = function(socket, fns){
+module.exports = function(socket, fns, io){
     socket.on('login', function(username){
         fns.checkIfAttact(socket);
         fs.readFile('users.json', 'utf-8', function(err, data){
@@ -37,8 +37,8 @@ module.exports = function(socket, fns){
         var message = new Message(data);
         message.save(function(err, message){
             if(err) console.log(err);
-            fns.updateList(socket, true);
-            socket.broadcast.emit('barrage message', data.content);
+            fns.updateList(socket, io);
+            io.emit('barrage message', data.content);
         });
     });
 
@@ -47,7 +47,7 @@ module.exports = function(socket, fns){
         fns.checkIfAttact(socket);
         Message.findByIdAndUpdate(message._id, {star:message.star}, function(err, message){
             if(err) console.log(err);
-            fns.updateList(socket, true);
+            fns.updateList(socket);
         });
     });
 

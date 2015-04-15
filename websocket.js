@@ -12,11 +12,11 @@ function dropHtml(string){
     }
 }
 
-function updateList(socket, broadcast){
+function updateList(socket, io){
     Message.find({}).sort({mid:-1}).exec(function(err, messages){
         if(err) console.log(err);
-        if(broadcast){
-            socket.broadcast.emit('updateList', messages);
+        if(io){
+            io.emit('updateList', messages);
         }else{
             socket.emit('updateList', messages);
         }

@@ -1,3 +1,5 @@
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
 var MessageBox = React.createClass({
     getInitialState:function(){
         return {data:[], orderBy:'time'};
@@ -19,8 +21,6 @@ var MessageBox = React.createClass({
     },
     messageSubmit:function(message){
         socket.emit('add message', message);
-        //this.state.data.unshift(message);
-        //this.setState({data:this.state.data});
     },
     starClick:function(id){
         var messages = this.state.data;
@@ -64,9 +64,9 @@ var MessageList =React.createClass({
     },
     render:function(){
         var self = this;
-        var lists = this.props.data.map(function(message, index){
+        var lists = this.props.data.map(function(message){
             return (
-                <li key={index} className="media">
+                <li key={message._id} className="media">
                     <div className="media-left media-middle">
                         <img className="media-object" src={message.avator}/>
                     </div>
@@ -87,9 +87,9 @@ var MessageList =React.createClass({
             );
         });
         return (
-            <ul>
+            <ReactCSSTransitionGroup component="ul" transitionName="example">
                 {lists}
-            </ul>
+            </ReactCSSTransitionGroup>
         );
     }
 });
