@@ -8180,8 +8180,8 @@ var img = ReactElement.createFactory('img');
 
 /**
  * Since onLoad doesn't bubble OR capture on the top level in IE8, we need to
- * capture it on the <img> element itself. There are lots of hacks we could do
- * to accomplish this, but the most reliable is to make <img> a composite
+ * capture it on the <images> element itself. There are lots of hacks we could do
+ * to accomplish this, but the most reliable is to make <images> a composite
  * component and use `componentDidMount` to attach the event handlers.
  */
 var ReactDOMImg = ReactClass.createClass({

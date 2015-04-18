@@ -1,5 +1,6 @@
 body{
-    padding-bottom:50px;
+    padding-bottom:30px;
+    color:#fff;
 }
 ul{ margin:0; padding:0; list-style: none;}
 .content{
@@ -12,18 +13,19 @@ ul{ margin:0; padding:0; list-style: none;}
 }
 .switch{
     margin-bottom:10px;
-    border-bottom:1px solid #ccc;
+    border-bottom:1px solid #C8DEE8;
 }
 .switch li{
     padding:5px;
-    border:1px solid #ccc;
+    border:1px solid #C8DEE8;
     border-bottom:0;
     cursor: pointer;
     text-align: center;
+    color:white;
 }
 .switch li:nth-of-type(1){ border-right:0;}
 .switch li.active{
-    background:rgb(130, 224, 255);
+    background:#5BC0DE;
 }
 .red{ color:red;}
 .message-box{

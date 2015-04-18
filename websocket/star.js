@@ -1,29 +1,24 @@
 var Message = require('../models/messages'),
+    User = require('../models/users');
     fs = require('fs');
 
 module.exports = function(socket, fns, io){
-    socket.on('login', function(username){
+    socket.on('login', function(userinfo){
         fns.checkIfAttact(socket);
-        fs.readFile('users.json', 'utf-8', function(err, data){
-            if(err){
-                socket.emit('login false');
-            }else{
-                var users = JSON.parse(data),
-                    found = false;
-                for(var i=0;i<users.length;i++){
-                    if(users[i].name == username){
-                        found = users[i];
-                        break;
+        var user = new User(userinfo);
+        User.findOne({name:userinfo.name}, function(err, u){
+            if(!u){
+                user.save(function(err, user){
+                    if(err){
+                        console.log(err);
+                    }else{
+                        Message.find({}).sort({mid:-1}).exec(function(err, messages){
+                            socket.emit('login success', {messages:messages, user:user});
+                        });
                     }
-                }
-                if(!found){
-                    socket.emit('login false');
-                }else{
-                    Message.find({}).sort({mid:-1}).exec(function(err, messages){
-                        if(err) console.log(err);
-                        socket.emit('login success', {user:found, messages:messages});
-                    });
-                }
+                });
+            }else{
+                socket.emit('login false');
             }
         });
     });
@@ -47,7 +42,7 @@ module.exports = function(socket, fns, io){
         fns.checkIfAttact(socket);
         Message.findByIdAndUpdate(message._id, {star:message.star}, function(err, message){
             if(err) console.log(err);
-            fns.updateList(socket);
+            fns.updateList(socket, io);
         });
     });
 
@@ -55,5 +50,18 @@ module.exports = function(socket, fns, io){
     socket.on('switch', function(){
         fns.checkIfAttact(socket);
         fns.updateList(socket);
+    });
+
+    //reload
+    socket.on('no-login', function(data){
+        User.findOne({uid:data}).exec(function(err, user){
+            if(user){
+                Message.find({}).sort({mid:-1}).exec(function(err, messages){
+                    socket.emit('login success', {messages:messages, user:user});
+                });
+            }else{
+                socket.emit('reload');
+            }
+        });
     });
 };

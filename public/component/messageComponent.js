@@ -6,10 +6,9 @@ var MessageBox = React.createClass({
     },
     componentDidMount:function(){
         socket.on('login success', function(data){
+            localStorage.setItem('uid', data.user.uid);
             userInfo = data.user;
-            userInfo.avator = '1.png';
-            document.getElementById('login').style.display = 'none';
-            document.getElementById('container').style.display = 'block';
+            login();
             data.messages = this.howToDisplayData(this.state.orderBy, data.messages);
             this.setState({data:data.messages});
         }.bind(this));
@@ -120,7 +119,7 @@ var MessageForm = React.createClass({
                             <input type="text" className="form-control" ref="message"/>
                         </div>
                         <div className="col-xs-3">
-                            <input type="submit" className="btn btn-default btn-block" value="发送"/>
+                            <input type="submit" className="btn btn-info btn-block" value="发送"/>
                         </div>
                     </div>
                 </form>

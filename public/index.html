@@ -6,6 +6,57 @@
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link href="css/index.css" type="text/css" rel="stylesheet" />
     <style>
+        html,body, div, p, ol, ul, li, table, tbody, tr, td, textarea,
+        form, input, h1, h2, h3, h4, h5, dl, dt, dd, img, iframe, header, nav,
+        section, article, footer, figure, figcaption, menu, a, p,button {padding: 0;margin: 0;}
+        html ,body{ width: 100%; height: 100%;}
+        body {-webkit-user-select: none; -moz-user-select: none; -webkit-text-size-adjust: none;font: 16px "Helvetica Neue", Helvetica, STHeiTi, "\5FAE\8F6F\96C5\9ED1", sans-serif; min-width: 320px; max-width: 640px; margin: 0 auto; background: #0e101c url(images/bg.jpg) no-repeat center top;}
+        a, span { text-decoration: none;display: inline-block;}
+        a:link, a:visited{ text-decoration:none; color: #fff;}
+        a,button{-webkit-tap-highlight-color:rgba(0,0,0,0);outline: none;}
+        button{border:none; background: transparent;}
+        li {list-style: none;}
+        header{ position: relative; width: 100%; height: 127px;}
+        header h1{ position: absolute; left: 30px; top: 18px; width: 119px; height: 50px; overflow: hidden; text-indent: -999px; background:transparent url(images/logo.png) no-repeat 0 0;}
+        header h2{ height: 0; overflow: hidden; padding-top: 127px; background:transparent url(images/tit.png) no-repeat center top;}
+        section{ margin: 0 30px;}
+        .mod_player{ height: 435px;}
+        .bili{ height: 92px; padding-top: 30px;}
+        .blink{ float: right; width: 183px; height: 62px; background:transparent url(images/bili.png) no-repeat left center;}
+        .turn{ position: relative; float: right; width: 114px; height: 62px; background-color: #12b7f5; border-radius: 31px;}
+        .off{ background-color: #e5e7ea;}
+        .turn span{ float: left; width: 50%; line-height: 62px; text-align: center; color: #fff;}
+        .turn a{ position: absolute; left: 0; top: 0; width: 114px; height: 62px;}
+        .turn a i{ display: inline-block; width: 58px; height: 58px; margin: 2px; background: #fff; border-radius: 29px; box-shadow: 0 0 5px rgba(0,0,0,0.8); -webkit-transition:all .5s ease;}
+        .on a i{-webkit-transform:translateX(52px);}
+        .off a i{-webkit-transform:translateX(0px);}
+        #send{ margin-bottom: 38px;}
+        .send{ width: 100%; height: 94px; /*display: -webkit-box; display: box; display: -webkit-flex; display: flex;*/}
+        .send input{ float: left; width: 384px; height: 87px; padding: 0 30px; font-size: 32px; border: none; border-top-left-radius: 8px; border-bottom-left-radius: 8px; /*box-flex:1; -webkit-box-flex:1; -webkit-flex:1; flex:1;*/}
+        .sendbtn{ float: left; width: 135px; height: 94px; background:transparent url(images/sendbtn.png) no-repeat right -1px;}
+        .sharebtn{ display: block; position: relative; width: 100%; height: 110px; background:transparent url(images/btn.png) no-repeat center center;}
+        .sharebtn i{ position: absolute; left: 15px; top: -20px;}
+        .sharebtn i img{-webkit-animation:tada 3s .2s infinite;}
+        .over{ display: none; position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: #000; opacity: 0.75; z-index: 1000;}
+        .poit{ display: none; position: absolute; top: 0; right: 14px; width: 320px; height: 272px; background: transparent url(http://3gimg.qq.com/qq_product_operations/mma/whatsnew/share.png) no-repeat center top; background-size:100%; z-index: 100000;}
+        footer{ padding: 45px 0; text-align: center; font-size: 16px; color: #fff; line-height: 28px;}
+        footer em{ padding-left: 104px; background:transparent url(images/tvlogo.png) no-repeat left center; font-style: normal;}
+        .mask{ display: none; position: absolute; left: 50%; top: 50%; width: 60%; margin: -18px 0 0 -30%; padding: 30px 0; border-radius: 5px; background: #000; color: #fff; font-size: 20px; text-align: center; opacity: 0.8;}
+        .eo{ opacity: 1;}
+
+        @-webkit-keyframes fadeOut {
+            0% {opacity: 1;}
+            100% {opacity: 0; }
+        }
+        /*.tvp_shadow{ background: transparent url(images/tvbg.jpg) no-repeat center center;}*/
+        @-webkit-keyframes tada{
+            0%{-webkit-transform:scale(1)}
+            10%{-webkit-transform:scale(1) rotate(-3deg)}
+            20%{-webkit-transform:scale(1) rotate(3deg)}
+            30%{-webkit-transform:scale(1) rotate(-3deg)}
+            40%{-webkit-transform:scale(1) rotate(0deg)}
+            100%{-webkit-transform:scale(1) rotate(0deg)}
+        }
         .example-enter {
             opacity: 0.01;
             transition: opacity .5s ease-in;
@@ -25,24 +76,37 @@
     </style>
 </head>
 <body>
-    <div class="container-fluid">
+    <section id="bili">
+        <div class="bili">
+            <a class="blink" href="javascript:;"></a>
+        </div>
+    </section>
+
+    <div class="container-fluid" style="padding:90px 0">
         <div id="container" style="display: none;"></div>
         <form class="form-horizontal" id="login">
             <div class="form-group">
                 <div class="col-xs-offset-2 col-xs-8">
-                    <input type="text" class="form-control" placeholder="姓名" name="name">
+                    <input type="text" class="form-control" placeholder="起一个口袋昵称吧" name="name">
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-xs-offset-2 col-xs-8">
-                    <input type="submit" class="btn btn-default btn-block" value="登陆">
+                    <input type="submit" class="btn btn-info btn-block" value="进入">
                 </div>
             </div>
         </form>
     </div>
-    <script src="libs/react-with-addons.js"></script>
+
+    <footer>
+        <em>本页面由口袋杭电提供技术支持</em>
+        <p>Copyrights &copy; 2015 Pocket Studio.</p>
+    </footer>
+
+    <script src="libs/react-with-addons.min.js"></script>
     <script src="libs/socket.io.min.js"></script>
     <script src="src/index.js"></script>
     <script src="src/messageComponent.js"></script>
+    <script src="libs/wxHideMenu.min.js"></script>
 </body>
 </html>
