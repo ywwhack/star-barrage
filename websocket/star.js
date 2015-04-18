@@ -64,4 +64,11 @@ module.exports = function(socket, fns, io){
             }
         });
     });
+
+    //clear messages
+    socket.on('clear messages', function(){
+        Message.remove({}, function(err){
+            fns.updateList(socket, io);
+        });
+    });
 };
