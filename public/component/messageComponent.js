@@ -49,7 +49,7 @@ var MessageBox = React.createClass({
     render:function(){
         return (
             <div>
-                <MessageSwitch onSwitchClick={this.switchClick} />
+                <MessageSwitch onSwitchClick={this.switchClick} username={userInfo.name}/>
                 <MessageList data={this.state.data} onStarClick={this.starClick}/>
                 <MessageForm onMessageSubmit={this.messageSubmit}/>
             </div>
@@ -142,17 +142,20 @@ var MessageSwitch = React.createClass({
     },
     render:function(){
         return (
-            <div className="row">
-                <ul className="col-xs-offset-3 col-xs-6 row switch" onClick={this.handleSwitch} ref="switch">
-                    <li className="col-xs-6 active" data-order="time">按时间</li>
-                    <li className="col-xs-6" data-order="star">按赞数</li>
-                </ul>
+            <div>
+                <p className="text-center">欢迎你，{this.props.username}</p>
+                <div className="row">
+                    <ul className="col-xs-offset-3 col-xs-6 row switch" onClick={this.handleSwitch} ref="switch">
+                        <li className="col-xs-6 active" data-order="time">按时间</li>
+                        <li className="col-xs-6" data-order="star">按赞数</li>
+                    </ul>
+                </div>
             </div>
         );
     }
 });
 
 React.render(
-    <MessageBox pollInterval={50}/>,
+    <MessageBox/>,
     document.getElementById('container')
 );

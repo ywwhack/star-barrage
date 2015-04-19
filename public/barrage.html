@@ -25,7 +25,7 @@
             '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
         ];
         var TIMES = [6,7,8,9,10];
-        var FONT = [24,28,32,36,40];
+        var FONT = [40,42,44,46,48];
 
         socket.on('barrage message', function(data){
             var oSpan = document.createElement('span'),
@@ -37,7 +37,7 @@
 
             oSpan.innerHTML = data;
             oSpan.style.color = color;
-            oSpan.style.fontSize = font;
+            oSpan.style.fontSize = font+'px';
             container.appendChild(oSpan);
 
             setTimeout(function(){

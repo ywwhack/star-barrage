@@ -49,7 +49,7 @@ var MessageBox = React.createClass({displayName: "MessageBox",
     render:function(){
         return (
             React.createElement("div", null, 
-                React.createElement(MessageSwitch, {onSwitchClick: this.switchClick}), 
+                React.createElement(MessageSwitch, {onSwitchClick: this.switchClick, username: userInfo.name}), 
                 React.createElement(MessageList, {data: this.state.data, onStarClick: this.starClick}), 
                 React.createElement(MessageForm, {onMessageSubmit: this.messageSubmit})
             )
@@ -142,10 +142,13 @@ var MessageSwitch = React.createClass({displayName: "MessageSwitch",
     },
     render:function(){
         return (
-            React.createElement("div", {className: "row"}, 
-                React.createElement("ul", {className: "col-xs-offset-3 col-xs-6 row switch", onClick: this.handleSwitch, ref: "switch"}, 
-                    React.createElement("li", {className: "col-xs-6 active", "data-order": "time"}, "按时间"), 
-                    React.createElement("li", {className: "col-xs-6", "data-order": "star"}, "按赞数")
+            React.createElement("div", null, 
+                React.createElement("p", {className: "text-center"}, "欢迎你，", this.props.username), 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("ul", {className: "col-xs-offset-3 col-xs-6 row switch", onClick: this.handleSwitch, ref: "switch"}, 
+                        React.createElement("li", {className: "col-xs-6 active", "data-order": "time"}, "按时间"), 
+                        React.createElement("li", {className: "col-xs-6", "data-order": "star"}, "按赞数")
+                    )
                 )
             )
         );
@@ -153,6 +156,6 @@ var MessageSwitch = React.createClass({displayName: "MessageSwitch",
 });
 
 React.render(
-    React.createElement(MessageBox, {pollInterval: 50}),
+    React.createElement(MessageBox, null),
     document.getElementById('container')
 );
