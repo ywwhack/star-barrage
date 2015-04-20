@@ -1,25 +1,25 @@
 var Message = require('../models/messages'),
-    User = require('../models/users');
-    fs = require('fs');
+    User = require('../models/users'),
+    fs = require('fs'),
+    co = require('co');
+
+function loginSuccess(socket, user){
+    co(function* (){
+        var messages = yield Message.find({}).sort({mid:-1}).exec();
+        socket.emit('login success', {messages:messages, user:user});
+    });
+}
 
 module.exports = function(socket, fns, io){
     socket.on('login', function(userinfo){
         fns.checkIfAttact(socket);
         var user = new User(userinfo);
-        User.findOne({name:userinfo.name}, function(err, u){
-            if(!u){
-                user.save(function(err, user){
-                    if(err){
-                        console.log(err);
-                    }else{
-                        Message.find({}).sort({mid:-1}).exec(function(err, messages){
-                            socket.emit('login success', {messages:messages, user:user});
-                        });
-                    }
-                });
-            }else{
-                socket.emit('login false');
-            }
+        co(function* (){
+            var user = yield User.create(userinfo);
+            loginSuccess(socket, user);
+        }).catch(function(e){
+            socket.emit('login false');
+            console.log(e);
         });
     });
 
@@ -29,20 +29,25 @@ module.exports = function(socket, fns, io){
         if(typeof(data) != 'object'){
             return;
         }
-        var message = new Message(data);
-        message.save(function(err, message){
-            if(err) console.log(err);
-            fns.updateList(socket, io);
-            io.emit('barrage message', data.content);
+        co(function* (){
+            try{
+                yield Message.create(data);
+                fns.updateList(socket, io);
+                io.emit('barrage message', data.content);
+            }catch(err){
+                console.log(err);
+            }
         });
     });
 
     //a star is clicked
     socket.on('star', function(message){
         fns.checkIfAttact(socket);
-        Message.findByIdAndUpdate(message._id, {star:message.star}, function(err, message){
-            if(err) console.log(err);
+        co(function* (){
+            yield Message.findByIdAndUpdate(message._id, {star:message.star}).exec();
             fns.updateList(socket, io);
+        }).catch(function(e){
+            console.log(e);
         });
     });
 
@@ -54,11 +59,10 @@ module.exports = function(socket, fns, io){
 
     //reload
     socket.on('no-login', function(data){
-        User.findOne({uid:data}).exec(function(err, user){
+        co(function* (){
+            var user = yield User.findOne({uid:data}).exec();
             if(user){
-                Message.find({}).sort({mid:-1}).exec(function(err, messages){
-                    socket.emit('login success', {messages:messages, user:user});
-                });
+                loginSuccess(socket, user);
             }else{
                 socket.emit('reload');
             }
@@ -67,8 +71,11 @@ module.exports = function(socket, fns, io){
 
     //clear messages
     socket.on('clear messages', function(){
-        Message.remove({}, function(err){
+        co(function* (){
+            yield Message.remove({}).exec();
             fns.updateList(socket, io);
+        }).catch(function(e){
+            console.log(e);
         });
     });
 };
